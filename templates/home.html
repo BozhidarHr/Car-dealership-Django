@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<ul>
+    {% for listing in page.object_list %}
+        <div class="card" style="margin: 20px ; width: 18rem; display: inline-block">
+            <img class="card-img-top" src="/media/{{ listing.image }}" alt="Card image cap">
+            <div class="card-body">
+            <h5 class="card-title">{{ listing.brand }} {{ listing.model }}</h5>
+            <p class="card-text">{{ listing.price }} €</p>
+             <p class="card-text">{{ listing.date_created.date }}</p>
+             <a class="btn btn-primary" href="{% url 'detailed listing' listing.id %}"> Details </a>
+            {% if request.user.id == listing.user_id%}
+            <a class="btn btn-secondary" href="{% url 'edit listing' listing.id %}"> Edit </a>
+                <a class="btn btn-danger" href="{% url 'delete listing' listing.id%}"> Delete </a>
+            {% endif %}
+
+  {#        dobavi validaciq i sloji ifove s butoni#}
+            </div>
+        </div>
+    {% endfor %}
+</ul>
+
+{#    pagination #}
+    <nav aria-label="...">
+  <ul class="pagination justify-content-center ">
+      {% if page.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="{% url 'home' %}?page={{ page.previous_page_number }}">Previous</a>
+        <li class="page-item"><a class="page-link" href="{% url 'home' %}?page={{ page.number|add:"-1"}}">{{ page.number|add:"-1"}}</a></li>
+        </li>
+      {% endif %}
+    <li class="page-item active" aria-current="page">
+      <span class="page-link">{{ page.number }}</span>
+    </li>
+
+    {% if page.has_next %}
+        <li class="page-item"><a class="page-link" href="{% url 'home' %}?page={{ page.number|add:"1"}}">{{ page.number|add:"1"}}</a></li>
+        <li class="page-item">
+            <a class="page-link" href="{% url 'home' %}?page={{ page.next_page_number }}">Next</a>
+        </li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+    <h2>Reviews from users</h2>
+    <ul>
+            {% for feedback in feedbacks %}
+                <div class="mine" style="margin: 30px; width: 18rem; display: inline-block">
+                <h5>{{ feedback.full_name }} - {{ feedback.rating }}</h5>
+                <span> {{ feedback.comment }}</span>
+                </div>
+            {% endfor %}
+
+    </ul>
+{% endblock %}

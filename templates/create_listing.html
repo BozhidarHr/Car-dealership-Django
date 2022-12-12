@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<body>
+<form enctype="multipart/form-data" method="POST" action="">
+    {% csrf_token %}
+<p>Brand: {{ form.brand}}</p>
+<p>Model: {{ form.model}}</p>
+<p>Engine: {{ form.engine}}</p>
+<p>Production year: {{ form.year}}</p>
+<p>Color: {{ form.color}}</p>
+<p>Price: {{ form.price}} €</p>
+<div>Description: {{ form.description}}</div>
+<p>Photo: {{ form.image}}</p>
+<input type="submit"/>
+    </form>
+</body>
+{% endblock %}

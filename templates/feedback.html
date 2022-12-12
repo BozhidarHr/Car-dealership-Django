@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="position-absolute top-50 start-50 translate-middle">
+<form method="POST">
+    {% csrf_token %}
+    <div>
+        <p>Full name: {{ form.full_name }}</p>
+        <p>Satisfaction level: {{ form.rating }}</p>
+        <p>Comment:{{ form.comment }}</p>
+    <input type="submit"/>
+    </div>
+</form>
+    </div>
+{% endblock %}
