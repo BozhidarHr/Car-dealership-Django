@@ -28,7 +28,12 @@ In order to run the project:
  pip install -r requirements.txt
  ```
  
- 5.Run migrations to set up database
+ 5.Run migrations to set up database. 
+  ```bash
+ python manage.py migrate
+ ```
+ The projects uses postgreSQL database.
+
  Note: You can run the default django database - sqlite by changing the database settings in settings.py:
 ```bash
 DATABASES = {
@@ -38,11 +43,6 @@ DATABASES = {
     }
 }
  ```
- If you wish to use PostgreSQL load the settings in the .env file.
- ```bash
- python manage.py migrate
- ```
- 
  6.Start the server
  ```bash
  python manage.py runserver
