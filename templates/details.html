@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<ul>
+    <div class="card" style="margin: 20px ; width: 18rem; display: inline-block">
+        <img class="card-img-top" src="/media/{{ listing.image }}" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">{{ listing.brand }} {{ listing.model }} </h5>
+        <p class="card-text"><strong>Engine: </strong> {{ listing.engine }}</p>
+        <p class="card-text"><strong>Production year: </strong> {{ listing.year }}</p>
+        <p class="card-text"><strong>Colour: </strong> {{ listing.color }}</p>
+            <p class="card-text"><strong>Price: </strong> {{ listing.price }} €</p>
+        <p class="card-text"><b>Description: </b>{{ listing.description }} </p>
+{#        Add engine ......#}
+            <p class="card-text"><strong>Date Published:</strong> {{ listing.date_created.date }}</p>
+            {% if request.user.id == listing.user_id%}
+                <a class="btn btn-secondary" href="{% url 'edit listing' listing.id %}"> Edit </a>
+                <a class="btn btn-danger" href="{% url 'delete listing' listing.id%}"> Delete </a>
+            {% endif %}
+                {% if request.user.is_authenticated %}
+                    <form method="post">
+                    {% csrf_token %}
+                    {{ comment_form }}
+                    <input type="submit"/>
+                    </form>
+                {% endif %}
+
+                    <h3>Comments</h3>
+                    {% for comment in comments %}
+                        <p> {{ comment.user }}</p>
+                        <p> {{ comment }}</p>
+                    {% endfor %}
+        </div>
+    </div>
+</ul>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block content %}
+<ul class="listings-view">
+    {% for listing in page.object_list %}
+        <div class="card listing">
+            <img class="card-img-top" src="/media/{{ listing.image }}" alt="Card image cap">
+            <div class="card-body">
+            <h5 class="card-title">{{ listing.brand }} {{ listing.model }}</h5>
+            <p class="card-text">{{ listing.price }} €</p>
+             <p class="card-text">{{ listing.date_created.date }}</p>
+             <a class="btn btn-primary" href="{% url 'detailed listing' listing.id %}">View <i class="fa fa-car-alt"></i> </a>
+            {% if request.user.id == listing.user_id%}
+            <a class="btn btn-secondary" href="{% url 'edit listing' listing.id %}"><i class="fas fa-edit"></i> </a>
+                <a class="btn btn-danger" href="{% url 'delete listing' listing.id%}"> <i class="far fa-trash-alt"></i> </a>
+            {% endif %}
+
+  {#        dobavi validaciq i sloji ifove s butoni#}
+            </div>
+        </div>
+    {% endfor %}
+</ul>
+
+{#    pagination #}
+  <ul class="pagination justify-content-center ">
+      {% if page.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="{% url 'home' %}?page={{ page.previous_page_number }}">Previous</a>
+        <li class="page-item"><a class="page-link" href="{% url 'home' %}?page={{ page.number|add:"-1"}}">{{ page.number|add:"-1"}}</a></li>
+        </li>
+      {% endif %}
+    <li class="page-item active" aria-current="page">
+      <span class="page-link">{{ page.number }}</span>
+    </li>
+
+    {% if page.has_next %}
+        <li class="page-item"><a class="page-link" href="{% url 'home' %}?page={{ page.number|add:"1"}}">{{ page.number|add:"1"}}</a></li>
+        <li class="page-item">
+            <a class="page-link" href="{% url 'home' %}?page={{ page.next_page_number }}">Next</a>
+        </li>
+    {% endif %}
+  </ul>
+    <div class="reviews-section-wrapper">
+        <h2>Reviews from users</h2>
+        <div class="reviews-wrapper">
+        {% for feedback in feedbacks %}
+            <div class="card feedback-card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ feedback.full_name }}</h5>
+                    <span style="font-size: 16px; font-style: italic"> {{ feedback.get_rating_display }} </span>
+                      {% if feedback.rating == "VS" %}
+                          <div class="stars-wrapper">
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          </div>
+                      {% elif feedback.rating == "S" %}
+                          <div class="stars-wrapper">
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          </div>
+                      {% elif feedback.rating == "NS" %}
+                        <div class="stars-wrapper">
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          </div>
+                      {% elif feedback.rating == "U" %}
+                         <div class="stars-wrapper">
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          </div>
+                      {% elif feedback.rating == "VU" %}
+                          <div class="stars-wrapper">
+                          <i class="fa fa-star"></i>
+                          </div>
+                      {% endif %}
+                    <p class="card-text">{{ feedback.comment }}</p>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

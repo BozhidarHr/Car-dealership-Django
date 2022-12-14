@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<ul class="listings-view">
+    {% for listing in page.object_list %}
+        {% if listing.user == request.user %}
+        <div class="card listing">
+            <img class="card-img-top" src="/media/{{ listing.image }}" alt="Card image cap">
+            <div class="card-body">
+            <h5 class="card-title">{{ listing.brand }} {{ listing.model }}</h5>
+            <p class="card-text">{{ listing.price }} €</p>
+             <p class="card-text">{{ listing.date_created.date }}</p>
+             <a class="btn btn-primary" href="{% url 'detailed listing' listing.id %}">View <i class="fa fa-car-alt"></i> </a>
+            <a class="btn btn-secondary" href="{% url 'edit listing' listing.id %}"><i class="fas fa-edit"></i> </a>
+                <a class="btn btn-danger" href="{% url 'delete listing' listing.id%}"> <i class="far fa-trash-alt"></i> </a>
+{#          dobavi validaciq i sloji ifove s butoni#}
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+
+</ul>
+  <ul class="pagination justify-content-center">
+      {% if page.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="{% url 'my listings view' %}?page={{ page.previous_page_number }}">Previous</a>
+        <li class="page-item"><a class="page-link" href="{% url 'my listings view' %}?page={{ page.number|add:"-1"}}">{{ page.number|add:"-1"}}</a></li>
+        </li>
+      {% endif %}
+    <li class="page-item active" aria-current="page">
+      <span class="page-link">{{ page.number }}</span>
+    </li>
+
+    {% if page.has_next %}
+        <li class="page-item"><a class="page-link" href="{% url 'my listings view' %}?page={{ page.number|add:"1"}}">{{ page.number|add:"1"}}</a></li>
+        <li class="page-item">
+            <a class="page-link" href="{% url 'my listings view' %}?page={{ page.next_page_number }}">Next</a>
+        </li>
+    {% endif %}
+    </ul>
+
+{% endblock%}
