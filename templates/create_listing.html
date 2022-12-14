@@ -1,17 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
-<body>
-<form enctype="multipart/form-data" method="POST" action="">
-    {% csrf_token %}
-<p>Brand: {{ form.brand}}</p>
-<p>Model: {{ form.model}}</p>
-<p>Engine: {{ form.engine}}</p>
-<p>Production year: {{ form.year}}</p>
-<p>Color: {{ form.color}}</p>
-<p>Price: {{ form.price}} €</p>
-<div>Description: {{ form.description}}</div>
-<p>Photo: {{ form.image}}</p>
-<input type="submit"/>
-    </form>
-</body>
+    <div class="create-form-wrapper">
+        <form enctype="multipart/form-data" method="POST" action="">
+            <div class="create-field-wrapper">
+                <h3 style="text-align: left;margin-bottom: 5%; color: #0062cc;">Create a listing</h3>
+            </div>
+                {% csrf_token %}
+            <div class="create-field-wrapper"> {{ form.brand }}</div>
+            <div class="create-field-wrapper">{{ form.model}} </div>
+            <div class="create-field-wrapper">{{ form.engine}}</div>
+            <div class="create-field-wrapper">{{ form.year}}</div>
+            <div class="create-field-wrapper">{{ form.color}}</div>
+            <div class="create-field-wrapper">{{ form.price }}</div>
+            <div class="create-field-wrapper">Image:<i class="fas fa-image create-picture"></i>{{ form.image }}</div>
+            <div class="create-field-wrapper">{{ form.description}}</div>
+            <div class="create-field-wrapper">
+                <button type="submit" class="btn btn-primary"> Create </button>
+            </div>
+        </form>
+    </div>
+
 {% endblock %}

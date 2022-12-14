@@ -17,7 +17,7 @@ class Feedback(models.Model):
     full_name = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     rating = models.CharField(max_length=2, choices = RATING_CHOICES, blank=False, null= False)
-    comment = models.TextField(max_length=250)
+    comment = models.TextField(max_length=100)
     date = models.DateTimeField(auto_now_add=True, null=True)
 
 
@@ -45,6 +45,9 @@ class Listing(models.Model):
     def __str__(self):
         return f'{self.brand} {self.model}'
 
+    def delete(self, using=None, keep_parents=False):
+        self.image.delete()
+        super().delete()
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)

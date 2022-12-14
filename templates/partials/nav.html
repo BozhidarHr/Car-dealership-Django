@@ -6,39 +6,41 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      {% if request.user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'my listings view' %}">My listings</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'create listing' %}">Create a listing</a>
-        </li>
-          <span class="nav-link active" style="margin-left: 600px">
-        Hello, {{ request.user }}
-      </span>
-        <li class="nav-item">
-          <a class="nav-link" style="margin-left: 10px" href="{% url 'contact us' %}">Contact Us</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link" style="margin-left: 10px" href="{% url 'feedback view' %}"> Rate us </a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link" style="margin-left: 10px" href="{% url 'logout' %}">Logout</a>
-        </li>
-          {% else %}
-          <li class="nav-item">
-          <a class="nav-link" style="margin-left: 900px" href="{% url 'contact us' %}">Contact Us</a>
-        </li>
-           <li class="nav-item">
-          <a class="nav-link active" aria-current="page"  href="{% url 'login form' %}">Login</a>
-        </li>
-       <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'registration form' %}">Register</a>
-        </li>
-          {% endif %}
-      </ul>
-
+        <div class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav-left">
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'my listings view' %}">My listings</a>
+                    </li>
+                    <li class="nav-item">
+                         <a class="nav-link" href="{% url 'create listing' %}">Create a listing</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" style="margin-left: 10px" href="{% url 'contact us' %}">Contact Us</a>
+                    </li>
+            </ul>
+            <ul class="navbar-nav-right">
+                {% if request.user.is_authenticated %}
+                <span class="nav-link active" style="margin-left: 10px">
+                    Hello, {{ request.user }}
+                </span>
+                <li class="nav-item">
+                  <a class="nav-link" style="margin-left: 10px" href="{% url 'feedback view' %}"> Rate us </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" style="margin-left: 10px" href="{% url 'logout' %}">Logout</a>
+                </li>
+                {% else %}
+                 <li class="nav-item">
+                    <a class="nav-link active" aria-current="page"  href="{% url 'login form' %}">Login</a>
+                 </li>
+                 <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'registration form' %}">Register</a>
+                  </li>
+                {% endif %}
+            </ul>
+      </div>
     </div>
   </div>
 </nav>

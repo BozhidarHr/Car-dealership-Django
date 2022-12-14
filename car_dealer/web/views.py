@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -15,9 +16,9 @@ from car_dealer.web.models import Listing, Feedback, Comment
 
 def home_view(request):
 
-    listings = Listing.objects.all()
-    feedbacks = Feedback.objects.all()
-    paginator = Paginator(listings, 5)
+    listings = Listing.objects.all().order_by('-date_created')
+    feedbacks = Feedback.objects.order_by('?')[:6]
+    paginator = Paginator(listings, 8)
     page_num = request.GET.get('page')
     page = paginator.get_page(page_num)
     context = {
@@ -31,35 +32,41 @@ def home_view(request):
 
 
 def register_view(request):
-    form = CreateUserForm()
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('/')
+    else:
+        form = CreateUserForm()
 
-    if request.method == "POST":
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, 'Account was created for ' + username)
+        if request.method == "POST":
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                username = form.cleaned_data.get('username')
+                messages.success(request, 'Account was created for ' + username)
 
-            return redirect('login form')
+                return redirect('login form')
 
-    context = {
-        'form': form
-    }
-    return render(request, 'register.html', context)
+        context = {
+            'form': form
+        }
+        return render(request, 'register.html', context)
 
 
 def login_view(request):
-    if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('/')
+    else:
+        if request.method == "POST":
+            username = request.POST.get('username')
+            password = request.POST.get('password')
 
-        user = authenticate(request, username=username, password=password)
+            user = authenticate(request, username=username, password=password)
 
-        if user is not None:
-            login(request, user)
-            return redirect('home')
-        else:
-            messages.info(request, 'Login credentials are incorrect.')
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                messages.info(request, 'Login credentials are incorrect.')
 
     context = {}
     return render(request, 'login.html', context)
@@ -91,6 +98,7 @@ class DeleteListingView(LoginRequiredMixin, DeleteView):
     model = Listing
     success_url = reverse_lazy('home')
     template_name = 'listing_confirm_delete.html'
+
 
 
 class FeedbackView(LoginRequiredMixin, FormView):
@@ -134,7 +142,7 @@ class MyListingsView(LoginRequiredMixin, ListView):
     queryset = model.objects.all()
 
     def paginate(self):
-        paginator = Paginator(self.queryset, 5)
+        paginator = Paginator(self.queryset, 8)
         page_num = self.request.GET.get('page')
         page = paginator.get_page(page_num)
 
@@ -145,7 +153,7 @@ class MyListingsView(LoginRequiredMixin, ListView):
         context['now'] = timezone.now()
         context['page'] = self.paginate()
         return context
-    # paginate_by = 8
+
 
 
 class DetailListingView(DetailView):

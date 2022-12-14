@@ -43,13 +43,14 @@ class ListingForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ListingForm, self).__init__(*args, **kwargs)
-        self.fields['brand'].widget = forms.TextInput(attrs={'placeholder': 'Brand..'})
-        self.fields['model'].widget = forms.TextInput(attrs={'placeholder': 'Model..'})
-        self.fields['price'].widget = forms.NumberInput(attrs={'placeholder': 'Price..'})
-        self.fields['year'].widget = forms.NumberInput(attrs={'placeholder': 'Production year..'})
-        self.fields['engine'].widget = forms.TextInput(attrs={'placeholder': 'Engine..'})
-        self.fields['color'].widget = forms.TextInput(attrs={'placeholder': 'Color..'})
-        self.fields['description'].widget = forms.Textarea(attrs={'placeholder': 'Enter description..'})
+        self.fields['brand'].widget = forms.TextInput(attrs={'placeholder': 'Brand..', 'class': 'form-control'})
+        self.fields['model'].widget = forms.TextInput(attrs={'placeholder': 'Model..', 'class': 'form-control'})
+        self.fields['price'].widget = forms.NumberInput(attrs={'placeholder': 'Price..', 'class': 'form-control'})
+        self.fields['year'].widget = forms.NumberInput(attrs={'placeholder': 'Production year..', 'class': 'form-control'})
+        self.fields['engine'].widget = forms.TextInput(attrs={'placeholder': 'Engine..', 'class': 'form-control'})
+        self.fields['color'].widget = forms.TextInput(attrs={'placeholder': 'Color..', 'class': 'form-control'})
+        self.fields['description'].widget = forms.Textarea(attrs={'placeholder': 'Enter description..', 'class': 'form-control'})
+
 
 
 class FeedbackForm(ModelForm):
@@ -59,8 +60,10 @@ class FeedbackForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(FeedbackForm, self).__init__(*args, **kwargs)
-        self.fields['comment'].widget = forms.Textarea(attrs={'placeholder': 'Comment..'})
+        self.fields['comment'].widget = forms.Textarea(attrs={'placeholder': 'Comment..','class': 'form-control'})
         self.fields['full_name'].widget.attrs['readonly'] = True
+        self.fields['full_name'].widget.attrs['class'] = 'form-control'
+        self.fields['rating'].widget.attrs['class'] = 'form-control'
 
 
 

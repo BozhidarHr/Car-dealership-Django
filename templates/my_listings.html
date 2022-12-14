@@ -1,31 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
-<ul>
+<ul class="listings-view">
     {% for listing in page.object_list %}
         {% if listing.user == request.user %}
-        <div class="card" style="margin: 20px ; width: 18rem; display: inline-block">
+        <div class="card listing">
             <img class="card-img-top" src="/media/{{ listing.image }}" alt="Card image cap">
             <div class="card-body">
             <h5 class="card-title">{{ listing.brand }} {{ listing.model }}</h5>
             <p class="card-text">{{ listing.price }} €</p>
-            <p class="card-text">{{ listing.date_created.date }}</p>
-            <a class="btn btn-primary" href="{% url 'detailed listing' listing.id %}"> Details </a>
-            {% if request.user.id == listing.user_id%}
-            <a class="btn btn-secondary" href="{% url 'edit listing' listing.id %}"> Edit </a>
-                <a class="btn btn-danger" href="{% url 'delete listing' listing.id%}"> Delete </a>
-            {% endif %}
+             <p class="card-text">{{ listing.date_created.date }}</p>
+             <a class="btn btn-primary" href="{% url 'detailed listing' listing.id %}">View <i class="fa fa-car-alt"></i> </a>
+            <a class="btn btn-secondary" href="{% url 'edit listing' listing.id %}"><i class="fas fa-edit"></i> </a>
+                <a class="btn btn-danger" href="{% url 'delete listing' listing.id%}"> <i class="far fa-trash-alt"></i> </a>
 {#          dobavi validaciq i sloji ifove s butoni#}
             </div>
         </div>
         {% endif %}
     {% endfor %}
 
-<nav aria-label="...">
+</ul>
   <ul class="pagination justify-content-center">
       {% if page.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="{% url 'home' %}?page={{ page.previous_page_number }}">Previous</a>
-        <li class="page-item"><a class="page-link" href="{% url 'home' %}?page={{ page.number|add:"-1"}}">{{ page.number|add:"-1"}}</a></li>
+            <a class="page-link" href="{% url 'my listings view' %}?page={{ page.previous_page_number }}">Previous</a>
+        <li class="page-item"><a class="page-link" href="{% url 'my listings view' %}?page={{ page.number|add:"-1"}}">{{ page.number|add:"-1"}}</a></li>
         </li>
       {% endif %}
     <li class="page-item active" aria-current="page">
@@ -33,13 +31,11 @@
     </li>
 
     {% if page.has_next %}
-        <li class="page-item"><a class="page-link" href="{% url 'home' %}?page={{ page.number|add:"1"}}">{{ page.number|add:"1"}}</a></li>
+        <li class="page-item"><a class="page-link" href="{% url 'my listings view' %}?page={{ page.number|add:"1"}}">{{ page.number|add:"1"}}</a></li>
         <li class="page-item">
-            <a class="page-link" href="{% url 'home' %}?page={{ page.next_page_number }}">Next</a>
+            <a class="page-link" href="{% url 'my listings view' %}?page={{ page.next_page_number }}">Next</a>
         </li>
     {% endif %}
-  </ul>
-</nav>
+    </ul>
 
-</ul>
 {% endblock%}

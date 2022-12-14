@@ -1,0 +1,60 @@
+.navbar-nav{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.navbar-nav-left, .navbar-nav-right{
+    display: flex;
+    list-style: none;
+    margin-bottom: 0px;
+}
+.listings-view{
+    padding-left: 0px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.listing{
+    width: 21%;
+    margin: 10px;
+}
+.listing .card-img-top {
+    height: 170px;
+    object-fit: cover;
+}
+.fal fa-car{
+
+}
+.reviews-wrapper{
+    display: flex;
+    justify-content: center;
+}
+.feedback-card{
+    margin: 10px;
+    background-color: whitesmoke;
+}
+.reviews-section-wrapper{
+    margin:30px 0px 30px 0px;
+}
+.stars-wrapper i{
+    color: goldenrod;
+}
+.create-form-wrapper{
+    display: flex;
+    justify-content: center;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.create-field-wrapper{
+    display: flex;
+    justify-content: space-between;
+    margin: 12px;
+}
+.create-picture:before{
+    margin-left: 10px;
+    margin-right: 10px;
+
+}
+
