@@ -1,4 +1,4 @@
-# Car-dealership-Django
+<h2>Car-dealership-Django</h2>
 In order to run the project:
 1. Clone the repo
  ```bash
@@ -23,7 +23,7 @@ In order to run the project:
  pip install -r requirements.txt
  ```
  5.Run migrations to set up database
- Note: You can run the default python database - sqlite, though you'd have to adjust the settings. Otherwise the project uses PostgreSQL.
+ Note: You can run the default django database - sqlite, though you'd have to adjust the settings. Otherwise the project uses PostgreSQL.
  ```bash
  python manage.py migrate
  ```
