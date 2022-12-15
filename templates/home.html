@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
+    {% for message in messages %}
+   <div class="alert alert-warning" style="display:flex; justify-content: center; padding: 3px; margin-top: 4px; margin-bottom: 0px"  role="alert">
+   {{ message }}
+   </div>
+{% endfor %}
 <ul class="listings-view">
     {% for listing in page.object_list %}
         <div class="card listing">
@@ -10,7 +15,7 @@
              <p class="card-text">{{ listing.date_created.date }}</p>
              <a class="btn btn-primary" href="{% url 'detailed listing' listing.id %}">View <i class="fa fa-car-alt"></i> </a>
             {% if request.user.id == listing.user_id%}
-            <a class="btn btn-secondary" href="{% url 'edit listing' listing.id %}"><i class="fas fa-edit"></i> </a>
+            <a class="btn btn-secondary" href="{% url 'edit listing' listing.id %}"><i class="fas fa-edit"></i></a>
                 <a class="btn btn-danger" href="{% url 'delete listing' listing.id%}"> <i class="far fa-trash-alt"></i> </a>
             {% endif %}
 
@@ -19,7 +24,7 @@
         </div>
     {% endfor %}
 </ul>
-
+{% if listings.all.count > 8 %}
 {#    pagination #}
   <ul class="pagination justify-content-center ">
       {% if page.has_previous %}
@@ -38,6 +43,7 @@
             <a class="page-link" href="{% url 'home' %}?page={{ page.next_page_number }}">Next</a>
         </li>
     {% endif %}
+  {% endif %}
   </ul>
     <div class="reviews-section-wrapper">
         <h2>Reviews from users</h2>

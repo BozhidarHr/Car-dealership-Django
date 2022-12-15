@@ -30,6 +30,7 @@ class ContactForm(models.Model):
     submission_date = models.DateTimeField(auto_now_add=True, null=True)
 
 
+
 class Listing(models.Model):
     brand = models.CharField(max_length=20)
     model = models.CharField(max_length=20)
@@ -49,6 +50,7 @@ class Listing(models.Model):
         self.image.delete()
         super().delete()
 
+
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     comment = models.TextField(max_length=150)
@@ -59,3 +61,16 @@ class Comment(models.Model):
         return self.comment
 
 
+class ReportListing(models.Model):
+    PROBLEM_CHOICES = (
+        ("P", 'Incorrect price'),
+        ('C', 'Incorrect characteristics'),
+        ('F', 'Fake listing'),
+        ('O', 'Other'),
+    )
+    problem = models.CharField(max_length=1, choices=PROBLEM_CHOICES, blank=False, null=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, blank=True)
+    description = models.CharField(max_length=200)
+    full_name = models.CharField(max_length=50, blank=True)
+    email = models.EmailField(max_length=60, blank=True)

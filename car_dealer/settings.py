@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -16,7 +17,6 @@ DEBUG = bool(os.environ.get("DEBUG"))
 
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
 
 
 INSTALLED_APPS = [
@@ -62,19 +62,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'car_dealer.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('ENGINE'),
-        'NAME': os.environ.get("DB_NAME"),
-        'USER': os.environ.get("DB_USER"),
-        'PASSWORD': os.environ.get("DB_PASSWORD"),
-        'HOST': os.environ.get("DB_HOST"),
-        'PORT': os.environ.get("DB_PORT"),
-    }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'car_dealer_db',
+        'USER': 'postgres-user',
+        'PASSWORD': 'password',
+        'HOST': '127.0.0.1',
+        'PORT': 5432,
+    },
 }
+
 
 
 # Password validation

@@ -1,13 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Delete</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
 <form method="post">{% csrf_token %}
-    <p>Are you sure you want to delete the listing?</p>
-    <input type="submit" value="Confirm">
+    <div style="display: flex; justify-content: center; margin-top: 10%">
+        <b>Are you sure you want to delete the listing?</b>
+  </div>
+    <div style="display: flex; justify-content: center; margin-top: 2%">
+        <button type="submit" class="btn btn-danger" > Delete </button>
+        <button style="margin-left: 1.5%" type="submit" name="cancel" class="btn btn-secondary" value="Cancel">Cancel</button>
+    </div>
+
+
+
 </form>
-</body>
-</html>
+{% endblock %}

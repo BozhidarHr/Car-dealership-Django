@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 
-from car_dealer.web.models import Listing, Feedback, ContactForm, Comment
+from car_dealer.web.models import Listing, Feedback, ContactForm, Comment, ReportListing
 
 
 class CreateUserForm(UserCreationForm):
@@ -89,4 +89,20 @@ class CommentForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(CommentForm, self).__init__(*args, **kwargs)
         self.fields['comment'].widget = forms.Textarea(attrs={'placeholder': 'Comment..'})
+
+
+class ReportListingForm(ModelForm):
+    class Meta:
+        model = ReportListing
+        fields = ['problem', 'description', 'full_name', 'email']
+
+    def __init__(self, *args, **kwargs):
+        super(ReportListingForm, self).__init__(*args, **kwargs)
+        self.fields['full_name'].widget.attrs['readonly'] = True
+        self.fields['full_name'].widget.attrs['class'] = 'form-control'
+        self.fields['email'].widget.attrs['readonly'] = True
+        self.fields['email'].widget.attrs['class'] = 'form-control'
+        self.fields['description'].widget = forms.Textarea(attrs={'placeholder': 'Describe the problem..','class': 'form-control'})
+        self.fields['problem'].widget.attrs['class'] = 'form-control'
+
 

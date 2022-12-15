@@ -1,7 +1,7 @@
 from django.urls import path
 
 from car_dealer.web.views import home_view, register_view, login_view, logout_view, listing_view, DeleteListingView, \
-    FeedbackView, EditListingView, MyListingsView, DetailListingView, ContactUsView
+    FeedbackView, EditListingView, MyListingsView, DetailListingView, ContactUsView, ReportListingView
 
 urlpatterns = (
     path('', home_view, name='home'),
@@ -15,4 +15,5 @@ urlpatterns = (
     path('feedback/', FeedbackView.as_view(),name='feedback view'),
     path('my_listings/', MyListingsView.as_view(), name='my listings view'),
     path('contact/', ContactUsView.as_view(), name='contact us'),
+    path('report/<int:pk>', ReportListingView.as_view(), name='report listing')
 )

@@ -13,22 +13,27 @@
 {#        Add engine ......#}
             <p class="card-text"><strong>Date Published:</strong> {{ listing.date_created.date }}</p>
             {% if request.user.id == listing.user_id%}
-                <a class="btn btn-secondary" href="{% url 'edit listing' listing.id %}"> Edit </a>
-                <a class="btn btn-danger" href="{% url 'delete listing' listing.id%}"> Delete </a>
+                <a class="btn btn-secondary" href="{% url 'edit listing' listing.id %}"> <i class="fas fa-edit"></i> </a>
+                <a class="btn btn-danger" href="{% url 'delete listing' listing.id%}"> <i class="far fa-trash-alt"></i> </a>
             {% endif %}
                 {% if request.user.is_authenticated %}
+                    {% if request.user != listing.user%}
+                        <a class="btn btn-danger" href="{% url 'report listing' listing.id %}">
+                            <i class="fas fa-flag"> Report </i></a>
+                        {% endif %}
                     <form method="post">
                     {% csrf_token %}
                     {{ comment_form }}
                     <input type="submit"/>
                     </form>
                 {% endif %}
-
+                {% if comments %}
                     <h3>Comments</h3>
                     {% for comment in comments %}
                         <p> {{ comment.user }}</p>
                         <p> {{ comment }}</p>
                     {% endfor %}
+                {% endif %}
         </div>
     </div>
 </ul>

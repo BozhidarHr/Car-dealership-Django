@@ -3,7 +3,7 @@
 <div class="create-form-wrapper">
     <form method="POST">
         <div class="create-field-wrapper">
-            <h3 style="text-align: left;margin-bottom: 5%; color: #0062cc;">Rate our website</h3>
+            <h2 style="text-align: left;margin-bottom: 5%; color: #0062cc;">Report a listing</h2>
         </div>
             {% csrf_token %}
         <div>
@@ -18,12 +18,18 @@
             {% endif %}
             <div class="create-field-wrapper"> Full name: </div>
         <div class="create-field-wrapper">{{ form.full_name }}</div>
-            <div class="create-field-wrapper"> Satisfaction level:</div>
-        <div class="create-field-wrapper">{{ form.rating }}</div>
-            <div class="create-field-wrapper"> Comment:</div>
-        <div class="create-field-wrapper">{{ form.comment }}</div>
+         <div class="create-field-wrapper"> Email: </div>
+        <div class="create-field-wrapper">{{ form.email }}</div>
+            <div class="create-field-wrapper"> Problem type:</div>
+        <div class="create-field-wrapper">{{ form.problem }}</div>
+            <div class="create-field-wrapper"> Description:</div>
+        <div class="create-field-wrapper">{{ form.description }}</div>
         <div class="create-field-wrapper">
-            <button type="submit" class="btn btn-primary"> Send </button>
+            <button type="submit" class="btn btn-danger"><i class="fas fa-flag"> Report </i></button>
+
+
+
+        </div>
         </div>
     </form>
 </div>

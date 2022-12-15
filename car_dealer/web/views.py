@@ -10,8 +10,8 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic import DeleteView, FormView, UpdateView, ListView, DetailView, TemplateView, CreateView
 
-from car_dealer.web.forms import CreateUserForm, ListingForm, FeedbackForm, TicketForm, CommentForm
-from car_dealer.web.models import Listing, Feedback, Comment
+from car_dealer.web.forms import CreateUserForm, ListingForm, FeedbackForm, TicketForm, CommentForm, ReportListingForm
+from car_dealer.web.models import Listing, Feedback, Comment, ReportListing
 
 
 def home_view(request):
@@ -99,6 +99,11 @@ class DeleteListingView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('home')
     template_name = 'listing_confirm_delete.html'
 
+    def post(self, request, *args, **kwargs):
+        if "cancel" in request.POST:
+            return HttpResponseRedirect(self.success_url)
+        else:
+            return super(DeleteListingView, self).post(request, *args, **kwargs)
 
 
 class FeedbackView(LoginRequiredMixin, FormView):
@@ -123,8 +128,8 @@ class FeedbackView(LoginRequiredMixin, FormView):
 class EditListingView(LoginRequiredMixin, UpdateView):
     login_url = '/login'
     model = Listing
-    template_name = 'create_listing.html'
-    fields = '__all__'
+    form_class = ListingForm
+    template_name = 'edit_listing.html'
     success_url = '/'
 
     def form_valid(self, form):
@@ -153,7 +158,6 @@ class MyListingsView(LoginRequiredMixin, ListView):
         context['now'] = timezone.now()
         context['page'] = self.paginate()
         return context
-
 
 
 class DetailListingView(DetailView):
@@ -189,7 +193,35 @@ class ContactUsView(FormView):
     form_class = TicketForm
     success_url = '/'
 
+
     def form_valid(self, form):
         ticket = form.save()
         return super().form_valid(ticket)
+
+
+class ReportListingView(LoginRequiredMixin, FormView):
+    login_url = '/login'
+    template_name = 'report_listing.html'
+    form_class = ReportListingForm
+    success_url = '/'
+    context_object_name = 'listing'
+    model = ReportListing
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['full_name'] = self.request.user.get_full_name()
+        initial['email'] = self.request.user.email
+        return initial
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        listing = get_object_or_404(Listing, pk=pk)
+        return listing
+
+    def form_valid(self, form):
+        report = form.save(commit=False)
+        report.user = self.request.user
+        report.listing = self.get_object()
+        messages.success(self.request, 'Your report was submitted! We will look into it as soon as possible.')
+        return super().form_valid(form)
 
