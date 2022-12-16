@@ -23,9 +23,6 @@
     height: 170px;
     object-fit: cover;
 }
-.fal fa-car{
-
-}
 .reviews-wrapper{
     display: flex;
     justify-content: center;
@@ -58,7 +55,24 @@
 
 }
 .image-field-wrapper{
+    display: block;
+    justify-content: space-between;
+}
+.photo{
+    margin-top: 0px;
+    margin-left: 0px;
+}
+.card-text-p{
+    margin-top: 2.5%;
+}
+.comment{
     display: flex;
     justify-content: space-between;
-    margin: 12px;
+    margin: 2%;
+}
+.comment-wrapper{
+    display: block;
+}
+.comment-form{
+    margin:4% 8% 8% 8%;
 }

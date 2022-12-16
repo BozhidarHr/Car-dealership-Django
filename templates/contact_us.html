@@ -7,6 +7,15 @@
                      src="https://image.ibb.co/kUagtU/rocket_contact.png" alt="rocket_contact"/>
             </div>
             <form style="padding: 14%;" method="post">
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
                 {% csrf_token %}
                 <h3 style="margin-bottom: 8%; margin-top: -10%; text-align: center; color: #0062cc;">Leave Us a Message</h3>
                <div class="row" style="margin-bottom: -7%;">

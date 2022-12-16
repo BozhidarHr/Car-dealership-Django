@@ -9,6 +9,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
 from django.views.generic import DeleteView, FormView, UpdateView, ListView, DetailView, TemplateView, CreateView
+from django.views.generic.edit import FormMixin
 
 from car_dealer.web.forms import CreateUserForm, ListingForm, FeedbackForm, TicketForm, CommentForm, ReportListingForm
 from car_dealer.web.models import Listing, Feedback, Comment, ReportListing
@@ -81,14 +82,14 @@ def logout_view(request):
 def listing_view(request):
     form = ListingForm
     if request.method == "POST":
-        listing_form = ListingForm(request.POST, request.FILES)
-        if listing_form.is_valid():
-            listing = listing_form.save(commit=False)
+        form = ListingForm(request.POST, request.FILES)
+        if form.is_valid():
+            listing = form.save(commit=False)
             listing.user = request.user
             listing.save()
             return redirect('home')
     context = {
-        'form': form
+        'form': form,
     }
     return render(request, 'create_listing.html', context)
 
@@ -98,11 +99,13 @@ class DeleteListingView(LoginRequiredMixin, DeleteView):
     model = Listing
     success_url = reverse_lazy('home')
     template_name = 'listing_confirm_delete.html'
+    success_message = "The listing was deleted successfully."
 
     def post(self, request, *args, **kwargs):
         if "cancel" in request.POST:
             return HttpResponseRedirect(self.success_url)
         else:
+            messages.success(self.request, self.success_message)
             return super(DeleteListingView, self).post(request, *args, **kwargs)
 
 
@@ -121,8 +124,8 @@ class FeedbackView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         feedback = form.save(commit=False)
         feedback.user = self.request.user
-        form.save()
-        return super().form_valid(form)
+        feedback.save()
+        return super().form_valid(feedback)
 
 
 class EditListingView(LoginRequiredMixin, UpdateView):
@@ -144,13 +147,15 @@ class MyListingsView(LoginRequiredMixin, ListView):
     model = Listing
     template_name = 'my_listings.html'
     context_object_name = 'listings'
-    queryset = model.objects.all()
+
+    def get_queryset(self):
+        queryset = self.model.objects.filter(user=self.request.user).order_by('-date_created')
+        return queryset
 
     def paginate(self):
-        paginator = Paginator(self.queryset, 8)
+        paginator = Paginator(self.get_queryset(), 8)
         page_num = self.request.GET.get('page')
         page = paginator.get_page(page_num)
-
         return page
 
     def get_context_data(self, **kwargs):
@@ -160,39 +165,32 @@ class MyListingsView(LoginRequiredMixin, ListView):
         return context
 
 
-class DetailListingView(DetailView):
+def detail_view(request, pk):
     template_name = 'details.html'
-    queryset = Listing.objects.all()
-    context_object_name = 'listing'
+    listing = get_object_or_404(Listing, pk=pk)
+    comments = Comment.objects.filter(listing=listing)
+    new_comment = None
 
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        data['comment_form'] = CommentForm
-        comments = Comment.objects.filter(
-            listing=self.get_object())
-        data['comments'] = comments
-        return data
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.listing = listing
+            new_comment.user = request.user
+            new_comment.save()
+    else:
+        comment_form = CommentForm()
 
-    def get_object(self):
-        pk = self.kwargs.get('pk')
-        listing = get_object_or_404(Listing, pk=pk)
-        return listing
-
-    def form_valid(self, form):
-        comment = form.save(commit = False)
-        return comment.save()
-
-    def post(self, request, *args, **kwargs):
-        comment = Comment(comment=request.POST.get('comment'), user=self.request.user, listing=self.get_object())
-        comment.save()
-        return self.get(self, request, *args, **kwargs)
+    return render(request, template_name, {'listing': listing,
+                                           'comments': comments,
+                                           'comment': new_comment,
+                                           'comment_form': comment_form})
 
 
 class ContactUsView(FormView):
     template_name = 'contact_us.html'
     form_class = TicketForm
     success_url = '/'
-
 
     def form_valid(self, form):
         ticket = form.save()

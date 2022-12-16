@@ -1,40 +1,57 @@
 {% extends 'base.html' %}
 {% block content %}
-<ul>
-    <div class="card" style="margin: 20px ; width: 18rem; display: inline-block">
-        <img class="card-img-top" src="/media/{{ listing.image }}" alt="Card image cap">
-        <div class="card-body">
-            <h5 class="card-title">{{ listing.brand }} {{ listing.model }} </h5>
-        <p class="card-text"><strong>Engine: </strong> {{ listing.engine }}</p>
-        <p class="card-text"><strong>Production year: </strong> {{ listing.year }}</p>
-        <p class="card-text"><strong>Colour: </strong> {{ listing.color }}</p>
-            <p class="card-text"><strong>Price: </strong> {{ listing.price }} €</p>
-        <p class="card-text"><b>Description: </b>{{ listing.description }} </p>
-{#        Add engine ......#}
-            <p class="card-text"><strong>Date Published:</strong> {{ listing.date_created.date }}</p>
+<div class="card mb-3" style="max-width: 100%; margin-top: 0.5%">
+  <div class="row g-0" >
+    <div class="col-md-4">
+      <img src="/media/{{ listing.image }}" class="img-fluid rounded-start">
+        <form method="post" class="comment-form">
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            {% csrf_token %}
+            {{ comment_form }}
+             <button type="submit" class="btn btn-primary" style="margin-top: 2.5%"> Submit </button>
+        </form>
+    </div>
+    <div class="col-md-8">
+      <div class="card-body" style="margin-left: 10%; margin-top: 1%; padding: 0%;">
+            <h4 class="card-title">{{ listing.brand }} {{ listing.model }} </h4>
+            <p class="card-text-p"><strong>Engine: </strong> {{ listing.engine }}</p>
+            <p class="card-text-p"><strong>Production year: </strong> {{ listing.year }}</p>
+            <p class="card-text-p"><strong>Colour: </strong> {{ listing.color }}</p>
+            <p class="card-text-p"><strong>Price: </strong> {{ listing.price }} €</p>
+            <p class="card-text-p"><b>Description: </b>{{ listing.description }} </p>
+            <p class="card-text-p"><strong>Date Published:</strong> {{ listing.date_created.date }}</p>
             {% if request.user.id == listing.user_id%}
                 <a class="btn btn-secondary" href="{% url 'edit listing' listing.id %}"> <i class="fas fa-edit"></i> </a>
                 <a class="btn btn-danger" href="{% url 'delete listing' listing.id%}"> <i class="far fa-trash-alt"></i> </a>
             {% endif %}
-                {% if request.user.is_authenticated %}
-                    {% if request.user != listing.user%}
-                        <a class="btn btn-danger" href="{% url 'report listing' listing.id %}">
-                            <i class="fas fa-flag"> Report </i></a>
-                        {% endif %}
-                    <form method="post">
-                    {% csrf_token %}
-                    {{ comment_form }}
-                    <input type="submit"/>
-                    </form>
+            {% if request.user.is_authenticated %}
+                {% if request.user != listing.user%}
+                    <a class="btn btn-danger" href="{% url 'report listing' listing.id %}">
+                        <i class="fas fa-flag"> Report </i></a>
                 {% endif %}
-                {% if comments %}
-                    <h3>Comments</h3>
-                    {% for comment in comments %}
-                        <p> {{ comment.user }}</p>
-                        <p> {{ comment }}</p>
-                    {% endfor %}
-                {% endif %}
+            {% endif %}
+            {% if comments %}
+                <h3>Comments</h3>
+                <div class="comment-wrapper">
+                {% for comment in comments %}
+                    <div class='comment'>
+                    {{ comment.user }}
+                     {{ comment }}
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </div>
-</ul>
+  </div>
+</div>
+
 {% endblock %}

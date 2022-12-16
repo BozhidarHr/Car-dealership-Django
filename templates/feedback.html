@@ -2,20 +2,19 @@
 {% block content %}
 <div class="create-form-wrapper">
     <form method="POST">
+    {% csrf_token %}
         <div class="create-field-wrapper">
             <h3 style="text-align: left;margin-bottom: 5%; color: #0062cc;">Rate our website</h3>
         </div>
-            {% csrf_token %}
-        <div>
-             {% if form.errors %}
-                {% for field in form %}
-                    {% for error in field.errors %}
-                        <div class="alert alert-danger">
-                            {{ error }}
-                        </div>
-                    {% endfor %}
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                        {{ error }}
+                    </div>
                 {% endfor %}
-            {% endif %}
+            {% endfor %}
+        {% endif %}
             <div class="create-field-wrapper"> Full name: </div>
         <div class="create-field-wrapper">{{ form.full_name }}</div>
             <div class="create-field-wrapper"> Satisfaction level:</div>

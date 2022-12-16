@@ -2,21 +2,35 @@
 {% block content %}
     <div class="create-form-wrapper">
         <form enctype="multipart/form-data" method="POST" action="">
+            {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
             <div class="create-field-wrapper">
                 <h3 style="text-align: left;margin-bottom: 5%; color: #0062cc;">Edit a listing</h3>
             </div>
                 {% csrf_token %}
-            <div class="create-field-wrapper"> {{ form.brand }}</div>
-            <div class="create-field-wrapper">{{ form.model}} </div>
-            <div class="create-field-wrapper">{{ form.engine}}</div>
-            <div class="create-field-wrapper">{{ form.year}}</div>
-            <div class="create-field-wrapper">{{ form.color}}</div>
-            <div class="create-field-wrapper">{{ form.price }}</div>
-            <div class="create-field-wrapper">
-            <div class="image-field-wrapper">
-            Image:<i class="fas fa-image create-picture"></i>{{ form.image }}
-            </div>
-            </div>
+                <div class="create-field-wrapper"> {{ form.brand }}</div>
+                <div class="create-field-wrapper">{{ form.model}} </div>
+                <div class="create-field-wrapper">{{ form.engine}}</div>
+                <div class="create-field-wrapper">{{ form.year}}</div>
+                <div class="create-field-wrapper">{{ form.color}}</div>
+                <div class="create-field-wrapper">{{ form.price }}</div>
+                <div class="create-field-wrapper">
+                <div class="create-field-wrapper photo">
+                    <i class="fas fa-image create-picture"></i>Image:
+                </div>
+                    <div class="image-field-wrapper"> {{ form.image }}
+                    </div>
+                </div>
+
+
+
             <div class="create-field-wrapper">{{ form.description}}</div>
             <div class="create-field-wrapper">
                 <button type="submit" class="btn btn-primary"> Edit </button>
