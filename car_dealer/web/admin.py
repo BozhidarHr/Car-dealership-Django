@@ -18,15 +18,13 @@ class UserAdmin(admin.ModelAdmin):
             }
         ),
         ('Permissions',
-         {'fields': ('is_staff', 'is_superuser', 'groups',),
+         {'fields': ('is_staff', 'is_superuser'),
           }
          ),
     )
 
     def full_name(self,obj):
         return f'{obj.first_name} {obj.last_name}'
-
-
 
 
 admin.site.unregister(User)

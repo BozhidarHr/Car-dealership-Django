@@ -15,5 +15,8 @@ urlpatterns = (
     path('feedback/', FeedbackView.as_view(),name='feedback view'),
     path('my_listings/', MyListingsView.as_view(), name='my listings view'),
     path('contact/', ContactUsView.as_view(), name='contact us'),
-    path('report/<int:pk>', ReportListingView.as_view(), name='report listing')
+    path('report/<int:pk>', ReportListingView.as_view(), name='report listing'),
 )
+handler404 = "car_dealer.web.views.page_not_found_view"
+handler403 = "car_dealer.web.views.page_forbidden"
+handler500 = "car_dealer.web.views.handler500"

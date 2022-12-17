@@ -64,15 +64,27 @@
 }
 .card-text-p{
     margin-top: 2.5%;
+
 }
 .comment{
-    display: flex;
-    justify-content: space-between;
-    margin: 2%;
+    flex: 0 0 30%;
+    margin: 1%;
+    margin-top: 4%;
 }
 .comment-wrapper{
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
+
 }
 .comment-form{
     margin:4% 8% 8% 8%;
 }
+.not-found-a{
+  background-color: #2196f3;
+  border: none;
+  color: white;
+  font-size: 1.5em;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+

@@ -2,7 +2,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
+from django.contrib.auth.models import Group, Permission, User
+from django.contrib.contenttypes.models import ContentType
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -171,6 +173,17 @@ def detail_view(request, pk):
     comments = Comment.objects.filter(listing=listing)
     new_comment = None
 
+    paginator = Paginator(comments, 6)
+    page_num = request.GET.get('page')
+    page = paginator.get_page(page_num)
+
+    try:
+        com = paginator.page(page)
+    except PageNotAnInteger:
+        com = paginator.page(1)
+    except EmptyPage:
+        com = paginator.page(paginator.num_pages)
+
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
@@ -181,10 +194,12 @@ def detail_view(request, pk):
     else:
         comment_form = CommentForm()
 
+
     return render(request, template_name, {'listing': listing,
                                            'comments': comments,
                                            'comment': new_comment,
-                                           'comment_form': comment_form})
+                                           'comment_form': comment_form,
+                                           'page': page})
 
 
 class ContactUsView(FormView):
@@ -222,4 +237,18 @@ class ReportListingView(LoginRequiredMixin, FormView):
         report.listing = self.get_object()
         messages.success(self.request, 'Your report was submitted! We will look into it as soon as possible.')
         return super().form_valid(form)
+
+
+def page_not_found_view(request, exception):
+    return render(request, '404.html', status=404)
+
+
+def page_forbidden(request, exception):
+    return render(request, '403.html', status=403)
+
+
+def handler500(request, *args, **kwargs):
+    return render(request, '500.html', status=500)
+
+
 
